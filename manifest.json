@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Wits Claims Automator",
+  "version": "1.0",
+  "description": "Auto-split and submit Wits MS claims from a paragraph.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "https://claims.ms.wits.ac.za/*",
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://claims.ms.wits.ac.za/*"],
+      "js": ["content.js"],
+      "css": ["panel.css"]
+    }
+  ],
+  "action": {
+    "default_title": "Wits Claims Automator"
+  }
+}

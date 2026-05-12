@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+#wits-claims-panel {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 420px;
+  background: #0d0d0d;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px #1a1a1a, 0 24px 64px rgba(0,0,0,0.6);
+  z-index: 999999;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: #e8e8e8;
+  overflow: hidden;
+  transition: height 0.2s ease;
+}
+
+#wits-claims-panel.collapsed {
+  width: 180px;
+  height: 42px !important;
+}
+
+#wca-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #111;
+  border-bottom: 1px solid #222;
+  cursor: pointer;
+  user-select: none;
+}
+
+#wca-header .wca-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #00e5a0;
+  text-transform: uppercase;
+}
+
+#wca-header .wca-toggle {
+  font-size: 11px;
+  color: #555;
+  transition: color 0.2s;
+}
+#wca-header:hover .wca-toggle { color: #aaa; }
+
+#wca-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wca-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.wca-row {
+  display: flex;
+  gap: 10px;
+}
+
+.wca-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+textarea#wca-paragraph {
+  width: 100%;
+  height: 100px;
+  background: #161616;
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  color: #e8e8e8;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  padding: 8px 10px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+textarea#wca-paragraph:focus { border-color: #00e5a0; }
+
+input.wca-input {
+  width: 100%;
+  background: #161616;
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  color: #e8e8e8;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+input.wca-input:focus { border-color: #00e5a0; }
+
+#wca-emp, #wca-man {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+}
+
+#wca-generate-btn {
+  width: 100%;
+  padding: 10px;
+  background: #00e5a0;
+  color: #0d0d0d;
+  border: none;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+#wca-generate-btn:hover { background: #00ffb3; }
+#wca-generate-btn:active { transform: scale(0.98); }
+#wca-generate-btn:disabled { background: #1a3d30; color: #2a6050; cursor: not-allowed; }
+
+#wca-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #555;
+  min-height: 14px;
+  text-align: center;
+}
+#wca-status.success { color: #00e5a0; }
+#wca-status.error { color: #ff5555; }
+#wca-status.loading { color: #888; }
+
+#wca-preview {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a transparent;
+}
+
+.wca-claim-card {
+  background: #161616;
+  border: 1px solid #222;
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.wca-claim-card .wca-claim-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #00e5a0;
+  margin-bottom: 3px;
+}
+
+.wca-claim-card .wca-claim-task {
+  font-weight: 600;
+  color: #e8e8e8;
+}
+
+.wca-claim-card .wca-claim-notes {
+  color: #888;
+  margin-top: 2px;
+}
+
+.wca-claim-card .wca-claim-team {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: #444;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+#wca-submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #00e5a0;
+  border: 1px solid #00e5a0;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: none;
+}
+#wca-submit-btn:hover { background: #00e5a0; color: #0d0d0d; }
+#wca-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#wca-api-section {
+  border-top: 1px solid #1e1e1e;
+  padding-top: 10px;
+}

@@ -5,16 +5,16 @@
   "description": "Auto-split and submit Wits MS claims from a paragraph.",
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
-    "https://claims.ms.wits.ac.za/*",
+    "https://10.100.20.53/*",
     "https://generativelanguage.googleapis.com/*"
-  ],
+],
   "content_scripts": [
     {
-      "matches": ["https://claims.ms.wits.ac.za/*"],
+      "matches": ["https://10.100.20.53/*"],
       "js": ["content.js"],
       "css": ["panel.css"]
     }
-  ],
+],
   "action": {
     "default_title": "Wits Claims Automator"
   }

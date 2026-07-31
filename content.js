@@ -110,17 +110,19 @@
 
     const TEAMS = {
       welcoming: 'Welcoming Team',
-      scientific: 'Scientific Research Support'
+      scientific: 'Scientific Research Support',
+      museum: 'Museum'
     };
 
-    const prompt = `You are helping a university lab assistant split their work summary into exactly ${count} claims for a timesheet system.
+    const prompt = `You are helping a university lab assistant split their work summary into exactly ${count} claims for a timesheet system with a minimum of 15 words per claim.
 
 Rules:
 - Split the paragraph into exactly ${count} claims.
 - Each claim covers one distinct task or activity.
 - "task" must be exactly 3 words.
 - "notes" must be 15-20 words describing the task naturally.
-- "team" must be EITHER "${TEAMS.welcoming}" (for all lab/MSL/WelcomeTools/welcoming work) OR "${TEAMS.scientific}" (ONLY when working at MSB assisting lecturers/professors).
+-"notes" must be more than 15 words.
+- "team" must be EITHER "${TEAMS.welcoming}" (for all lab/MSL/WelcomeTools/welcoming work) OR "${TEAMS.scientific}" (ONLY when working at MSB assisting lecturers/professors) unless specified.
 - Return ONLY a valid JSON array, no markdown, no explanation.
 
 Format:
@@ -154,15 +156,27 @@ Work summary:
       let raw = data.candidates[0].content.parts[0].text.trim();
       // Strip markdown code fences
       raw = raw.replace(/```json|```/g, '').trim();
-      // Extract just the JSON array if there's surrounding text
+      // Extract just the JSON array
       const arrayMatch = raw.match(/\[[\s\S]*\]/);
       if (!arrayMatch) throw new Error('No JSON array found in response');
       raw = arrayMatch[0];
-      // Fix single-quoted keys/values to double quotes
-      raw = raw.replace(/'/g, '"');
       // Remove trailing commas before ] or }
       raw = raw.replace(/,\s*([\]}])/g, '$1');
-      generatedClaims = JSON.parse(raw);
+      // Parse manually using a more lenient approach
+      try {
+        generatedClaims = JSON.parse(raw);
+      } catch (e) {
+        // Fallback: extract individual objects
+        const objMatches = raw.match(/\{[^{}]*\}/g);
+        if (!objMatches) throw new Error('Could not parse response: ' + e.message);
+        generatedClaims = objMatches.map(obj => {
+          // Extract task, notes, team using regex
+          const task  = obj.match(/"task"\s*:\s*"([^"]+)"/)?.[1] || '';
+          const notes = obj.match(/"notes"\s*:\s*"([^"]+)"/)?.[1] || '';
+          const team  = obj.match(/"team"\s*:\s*"([^"]+)"/)?.[1] || 'Welcoming Team';
+          return { task, notes, team };
+        });
+      }
 
       if (!Array.isArray(generatedClaims) || generatedClaims.length !== count) {
         throw new Error(`Expected ${count} claims, got ${generatedClaims.length}`);
@@ -214,7 +228,7 @@ Work summary:
       const c = generatedClaims[i];
       setStatus(`Submitting claim ${i + 1} of ${generatedClaims.length}…`, 'loading');
       try {
-        const res = await fetch('https://claims.ms.wits.ac.za/api/claimsform', {
+        const res = await fetch('https://10.100.20.53/api/claimsform', {
           method: 'POST',
           headers: {
             'accept': 'application/json, text/plain, */*',
